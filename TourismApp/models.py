@@ -19,3 +19,4 @@ class Tour(models.Model):
     itinerary = models.TextField()
     travel_mode = models.CharField(max_length=400)
     contact_num = models.CharField(max_length=40)
+    price = models.CharField(max_length=30, blank=True)

@@ -1,3 +1,4 @@
+import ast
 from django.shortcuts import render
 
 from rest_framework.views import APIView
@@ -23,6 +24,36 @@ class LocationViewSet(ModelViewSet):
     queryset = Location.objects.all()
 
 
+@api_view(["GET"])
+def get_location(request, id):
+    location = Location.objects.get(id=id)
+    serializer = LocationSerializer(location)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def get_tour(request, id):
+    tour = Tour.objects.get(id=id)
+    serializer = TourSerializer(tour)
+    return Response(serializer.data)
+
+
 class ToursViewSet(ModelViewSet):
-    serializer_class = LocationSerializer
+    serializer_class = TourSerializer
     queryset = Tour.objects.all()
+
+
+@api_view(["POST"])
+def add_location_to_tours(request):
+    data = request.data
+    tour = Tour.objects.get(id=data["tour_id"])
+    locations = data["locations"]
+
+    locations = ast.literal_eval(locations)
+
+    # serializer = TourSerializer(tour)
+
+    for loc in locations:
+        tour.locations.add(loc)
+
+    return Response({"status": True})

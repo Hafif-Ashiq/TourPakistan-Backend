@@ -12,18 +12,9 @@ router = routers.DefaultRouter()
 
 
 urlpatterns = [
-    path("location", LocationViewSet.as_view()),
-    path("tours", ToursViewSet.as_view()),
-]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += [
-    re_path(
-        r"^media/(?P<path>.*)$",
-        serve,
-        {
-            "document_root": settings.MEDIA_ROOT,
-        },
-    ),
+    path("location", LocationViewSet.as_view({"get": "list", "post": "create"})),
+    path("tours", ToursViewSet.as_view({"get": "list", "post": "create"})),
+    path("add-location-to-tour", add_location_to_tours),
+    path("get-location/<id>", get_location),
+    path("get-tour/<id>", get_tour),
 ]

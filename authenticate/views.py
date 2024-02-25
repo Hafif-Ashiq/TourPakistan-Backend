@@ -59,26 +59,28 @@ class RegisterUser(APIView):
 
 class LoginUser(APIView):
     def post(self, request):
-        try:
-            username = request.data["email"]
-            password = request.data["password"]
-            user = authenticate(request, username=username, password=password)
+        # try:
+        print(request.data)
+        username = request.data["email"]
+        password = request.data["password"]
+        user = authenticate(request, username=username, password=password)
 
-            if user is not None:
-                token_obj, _ = Token.objects.get_or_create(user=user)
-                user_object = User.objects.get(email=user)
-                serializer = UserSerializer(user_object)
-                return Response(
-                    {
-                        "status": True,
-                        "role": serializer.data["role"],
-                        "token": str(token_obj),
-                    }
-                )
-            return Response({"status": False})
-        except Exception as e:
-            print(e)
-            return Response({"status": False})
+        if user is not None:
+            token_obj, _ = Token.objects.get_or_create(user=user)
+            user_object = User.objects.get(email=user)
+            serializer = UserSerializer(user_object)
+            return Response(
+                {
+                    "status": True,
+                    "role": serializer.data["role"],
+                    "token": str(token_obj),
+                }
+            )
+        return Response({"status": False})
+
+    # except Exception as e:
+    #     print(e)
+    #     return Response({"status": False})
 
 
 class RegisterAgency(APIView):
